@@ -14,11 +14,10 @@ class LoginPage extends StatefulWidget {
 // ##################################################################
 
 class _LoginPageState extends State<LoginPage> {
-  String userInput = "";
-  final testUser = User(userMail: "markus@gmail.com", userPassword: "12345");
+  final user = User(userMail: "markus@gmail.com", userPassword: "12345");
 
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
 //
@@ -43,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             //                        Email
             TextFormField(
-              controller: emailController,
+              controller: _emailController,
               decoration: InputDecoration(
                 label: Text("Email eingeben"),
                 border: OutlineInputBorder(),
@@ -53,19 +52,21 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 32),
             //                        Password
             TextFormField(
-              controller: passwordController,
+              controller: _passwordController,
               obscureText: _obscurePassword,
               decoration: InputDecoration(
                 label: Text("Passwort "),
                 border: OutlineInputBorder(),
-                suffix: IconButton(
+                suffixIcon: IconButton(
                   icon: Icon(
                     _obscurePassword ? Icons.visibility_off : Icons.visibility,
                   ),
                   onPressed: () {
-                    setState(() {
-                      _obscurePassword = !_obscurePassword;
-                    });
+                    setState(
+                      () {
+                        _obscurePassword = !_obscurePassword;
+                      },
+                    );
                   },
                 ),
               ),
@@ -73,20 +74,19 @@ class _LoginPageState extends State<LoginPage> {
             //                          Bttn
             FilledButton(
               onPressed: () {
-                final email = emailController.text;
-                final password = passwordController.text;
+                final email = _emailController.text;
+                final password = _passwordController.text;
 
-                if (email == testUser.userMail &&
-                    password == testUser.userPassword) {
+                if (email == user.userMail && password == user.userPassword) {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => SecondPage()),
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
+                      backgroundColor: Colors.red,
                       content: Text(
                         "falsche Eingabedaten",
-                        style: TextStyle(color: Colors.redAccent),
                       ),
                     ),
                   );
