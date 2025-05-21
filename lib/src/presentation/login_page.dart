@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:input_textformfield/second_page.dart';
-import 'package:input_textformfield/user.dart';
+import 'package:input_textformfield/src/domain/validate_user.dart';
+import 'package:input_textformfield/src/presentation/second_page.dart';
+import 'package:input_textformfield/src/domain/user.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({
@@ -14,25 +15,24 @@ class LoginPage extends StatefulWidget {
 // ##################################################################
 
 class _LoginPageState extends State<LoginPage> {
-  final user = User(userMail: "markus@gmail.com", userPassword: "12345");
+  final user =
+      User(userMail: "markus@gmail.com", userPassword: "MarkusWillmann_38");
 
+  final _userController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
-//
+//______________________________________________________initState
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
   }
-//
+//______________________________________________________
 
   @override
   Widget build(BuildContext context) {
-//
-
-//
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 199, 199, 199),
       body: Padding(
@@ -40,9 +40,23 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            //                        Email
+            //______________________________________________________User
+            TextFormField(
+              controller: _userController,
+              validator: validateUsername,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              decoration: InputDecoration(
+                label: Text("Namen eingeben"),
+                border: OutlineInputBorder(),
+              ),
+            ),
+            //______________________________________________________Email
+            SizedBox(height: 32),
+
             TextFormField(
               controller: _emailController,
+              validator: validateEmail,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               decoration: InputDecoration(
                 label: Text("Email eingeben"),
                 border: OutlineInputBorder(),
@@ -50,10 +64,12 @@ class _LoginPageState extends State<LoginPage> {
             ),
             //
             SizedBox(height: 32),
-            //                        Password
+            //___________________________________________________Password
             TextFormField(
               controller: _passwordController,
               obscureText: _obscurePassword,
+              validator: validatePassword,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               decoration: InputDecoration(
                 label: Text("Passwort "),
                 border: OutlineInputBorder(),
@@ -71,14 +87,14 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            //                          Bttn
+            //______________________________________________________Bttn
             FilledButton(
               onPressed: () {
                 final email = _emailController.text;
                 final password = _passwordController.text;
 
                 if (email == user.userMail && password == user.userPassword) {
-                  Navigator.of(context).push(
+                  Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => SecondPage()),
                   );
                 } else {
@@ -101,11 +117,11 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+// _____________________________________________________dispose
   @override
   void dispose() {
+    // TODO: implement dispose
     super.dispose();
   }
+  //____________________________________________________
 }
-
-
-// 

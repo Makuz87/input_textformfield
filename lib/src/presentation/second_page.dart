@@ -7,7 +7,6 @@ class SecondPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: const Color.fromARGB(255, 190, 190, 190),
         backgroundColor: const Color.fromARGB(255, 135, 135, 135),
       ),
       backgroundColor: Colors.grey,
