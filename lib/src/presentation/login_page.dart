@@ -48,6 +48,8 @@ class _LoginPageState extends State<LoginPage> {
             final bool isFormValid = formKey.currentState!.validate();
             _isButtonDisabled = !isFormValid;
           },
+          // nicht in die Form rein!
+          // autovalidateMode: AutovalidateMode.onUnfocus,
           key: formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
