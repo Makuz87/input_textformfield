@@ -23,11 +23,17 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
+  final formKey = GlobalKey<FormState>();
+  bool _isButtonDisabled = true;
+
 //______________________________________________________initState
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _userController;
+    _emailController;
+    _passwordController;
   }
 //______________________________________________________
 
@@ -37,81 +43,82 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: const Color.fromARGB(255, 199, 199, 199),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            //______________________________________________________User
-            TextFormField(
-              controller: _userController,
-              validator: validateUsername,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              decoration: InputDecoration(
-                label: Text("Namen eingeben"),
-                border: OutlineInputBorder(),
-              ),
-            ),
-            //______________________________________________________Email
-            SizedBox(height: 32),
-
-            TextFormField(
-              controller: _emailController,
-              validator: validateEmail,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              decoration: InputDecoration(
-                label: Text("Email eingeben"),
-                border: OutlineInputBorder(),
-              ),
-            ),
-            //
-            SizedBox(height: 32),
-            //___________________________________________________Password
-            TextFormField(
-              controller: _passwordController,
-              obscureText: _obscurePassword,
-              validator: validatePassword,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              decoration: InputDecoration(
-                label: Text("Passwort "),
-                border: OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                  ),
-                  onPressed: () {
-                    setState(
-                      () {
-                        _obscurePassword = !_obscurePassword;
-                      },
-                    );
-                  },
+        child: Form(
+          onChanged: () {
+            final bool isFormValid = formKey.currentState!.validate();
+            _isButtonDisabled = !isFormValid;
+          },
+          key: formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              //______________________________________________________User
+              TextFormField(
+                controller: _userController,
+                validator: validateUsername,
+                // autovalidateMode: AutovalidateMode.onUnfocus,
+                decoration: InputDecoration(
+                  label: Text("Namen eingeben"),
+                  border: OutlineInputBorder(),
                 ),
               ),
-            ),
-            //______________________________________________________Bttn
-            FilledButton(
-              onPressed: () {
-                final email = _emailController.text;
-                final password = _passwordController.text;
+              //______________________________________________________Email
+              SizedBox(height: 32),
 
-                if (email == user.userMail && password == user.userPassword) {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => SecondPage()),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      backgroundColor: Colors.red,
-                      content: Text(
-                        "falsche Eingabedaten",
-                      ),
+              TextFormField(
+                controller: _emailController,
+                validator: validateEmail,
+                // autovalidateMode: AutovalidateMode.onUnfocus,
+                decoration: InputDecoration(
+                  label: Text("Email eingeben"),
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              //
+              SizedBox(height: 32),
+              //___________________________________________________Password
+              TextFormField(
+                controller: _passwordController,
+                obscureText: _obscurePassword,
+                validator: validatePassword,
+                // autovalidateMode: AutovalidateMode.onUnfocus,
+                decoration: InputDecoration(
+                  label: Text("Passwort "),
+                  border: OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
                     ),
-                  );
-                }
-              },
-              child: Text("Login"),
-            )
-            //
-          ],
+                    onPressed: () {
+                      setState(
+                        () {
+                          _obscurePassword = !_obscurePassword;
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ),
+              //______________________________________________________Bttn
+              FilledButton(
+                onPressed: _isButtonDisabled
+                    ? null
+                    : () {
+                        final bool isFormValid =
+                            formKey.currentState!.validate();
+                        if (isFormValid) {}
+
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => SecondPage(),
+                        ));
+                      },
+                child: Text("Login"),
+              )
+              //
+            ],
+          ),
         ),
       ),
     );
@@ -122,6 +129,9 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    _userController;
+    _emailController;
+    _passwordController;
   }
   //____________________________________________________
 }
